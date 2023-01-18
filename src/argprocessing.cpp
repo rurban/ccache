@@ -653,6 +653,17 @@ process_option_arg(const Context& ctx,
     }
     return Statistic::none;
   }
+  if (config.is_compiler_group_msvc()
+      // seperate .pdb
+      && (util::starts_with(args[i], "-Zi")
+          // seperate edit+continue, implies /FC (full src path)
+          || util::starts_with(args[i], "-ZI")
+          // embed debug info
+          || util::starts_with(args[i], "-Z7"))) {
+    state.common_args.push_back(args[i]);
+    args_info.generating_debuginfo = true;
+    return Statistic::none;
+  }
 
   if (config.is_compiler_group_msvc() && !config.is_compiler_group_clang()
       && is_msvc_z_debug_option(arg)) {
