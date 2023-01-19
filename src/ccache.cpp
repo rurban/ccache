@@ -271,19 +271,26 @@ do_guess_compiler(const fs::path& path)
 {
   const auto name =
     util::to_lowercase(path.filename().replace_extension("").string());
+#ifdef _WIN32
+  const auto wname = util::to_lowercase(Util::base_name(compiler_path));
+#endif
   if (name.find("clang-cl") != std::string_view::npos) {
     return CompilerType::clang_cl;
   } else if (name.find("clang") != std::string_view::npos) {
+    return CompilerType::clang;
+  } else if (name.find("icx") != std::string_view::npos) {
     return CompilerType::clang;
   } else if (name.find("gcc") != std::string_view::npos
              || name.find("g++") != std::string_view::npos) {
     return CompilerType::gcc;
   } else if (name.find("nvcc") != std::string_view::npos) {
     return CompilerType::nvcc;
-  } else if (name == "icl") {
+#ifdef _WIN32
+  } else if (wname == "icl.exe") {
     return CompilerType::icl;
-  } else if (name == "cl") {
+  } else if (wname == "cl.exe" || wname == "link.exe") {
     return CompilerType::msvc;
+#endif
   } else {
     return CompilerType::other;
   }

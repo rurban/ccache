@@ -176,6 +176,10 @@ TEST_CASE("guess_compiler")
     CHECK(guess_compiler("/test/prefix/clang-3.8") == CompilerType::clang);
     CHECK(guess_compiler("/test/prefix/clang++") == CompilerType::clang);
     CHECK(guess_compiler("/test/prefix/clang++-10") == CompilerType::clang);
+    CHECK(guess_compiler("/test/prefix/icx") == CompilerType::clang);
+
+    CHECK(guess_compiler("/test/prefix/clang-cl") == CompilerType::clang_cl);
+    CHECK(guess_compiler("/test/prefix/clang-cl-10") == CompilerType::clang_cl);
 
     CHECK(guess_compiler("/test/prefix/gcc") == CompilerType::gcc);
     CHECK(guess_compiler("/test/prefix/gcc-4.8") == CompilerType::gcc);
@@ -187,9 +191,19 @@ TEST_CASE("guess_compiler")
     CHECK(guess_compiler("/test/prefix/nvcc") == CompilerType::nvcc);
     CHECK(guess_compiler("/test/prefix/nvcc-10.1.243") == CompilerType::nvcc);
 
+#ifdef _WIN32
+    CHECK(guess_compiler("c:/test/prefix/cl.exe") == CompilerType::msvc);
+    CHECK(guess_compiler("c:/test/prefix/link.exe") == CompilerType::msvc);
+    CHECK(guess_compiler("/test/prefix/icl.exe") == CompilerType::icl);
+#endif
+
     CHECK(guess_compiler("/test/prefix/x") == CompilerType::other);
     CHECK(guess_compiler("/test/prefix/cc") == CompilerType::other);
     CHECK(guess_compiler("/test/prefix/c++") == CompilerType::other);
+    CHECK(guess_compiler("/usr/local/bin/chibicc") == CompilerType::other);
+    CHECK(guess_compiler("/usr/local/bin/lcc") == CompilerType::other);
+    CHECK(guess_compiler("/usr/local/bin/tcc") == CompilerType::other);
+    CHECK(guess_compiler("/usr/local/bin/pcc") == CompilerType::other);
   }
 
 #ifndef _WIN32
