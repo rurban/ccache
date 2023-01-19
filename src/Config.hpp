@@ -38,9 +38,10 @@ enum class CompilerType {
   clang,
   clang_cl,
   gcc,
-  icl,
+  icl, // ie the old intel windows compiler. the new ICX is clang based
   msvc,
   nvcc,
+  /* tcc, pcc, chibicc, lcc */
   other
 };
 
@@ -101,7 +102,7 @@ public:
   // Return true for Clang and clang-cl.
   bool is_compiler_group_clang() const;
 
-  // Return true for MSVC (cl.exe), clang-cl, and icl.
+  // Return true for MSVC (cl.exe, link.exe), clang-cl, and icl.
   bool is_compiler_group_msvc() const;
 
   util::SizeUnitPrefixType size_unit_prefix_type() const;

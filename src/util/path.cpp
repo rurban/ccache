@@ -108,7 +108,8 @@ path_starts_with(std::string_view path, std::string_view prefix)
     if (path[i] == '\\' && prefix[j] == '/') {
       continue;
     }
-    if (std::tolower(path[i]) != std::tolower(prefix[j])) {
+    const std::locale loc = std::locale();
+    if (std::tolower(path[i], loc) != std::tolower(prefix[j], loc)) {
       return false;
     }
 #else
