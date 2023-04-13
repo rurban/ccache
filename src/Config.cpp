@@ -1206,5 +1206,11 @@ Config::default_temporary_dir() const
 #endif
     return std::string();
   }();
-  return !run_user_tmp_dir.empty() ? run_user_tmp_dir : m_cache_dir + "/tmp";
+  return !run_user_tmp_dir.empty() ? run_user_tmp_dir : m_cache_dir +
+#ifndef _WIN32
+    "/"
+#else
+    "\\"
+#endif
+    + "tmp";
 }
